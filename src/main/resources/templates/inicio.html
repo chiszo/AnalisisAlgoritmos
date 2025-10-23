@@ -1,4 +1,4 @@
-<!doctype html>
+<!--<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -24,5 +24,40 @@
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Algoritmos de Ordenación</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/inicio}">Algoritmos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/burbuja}">Burbuja</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/insercion}">Inserción</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/seleccion}">Selección</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/quicksort}">QuickSort</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/mergesort}">MergeSort</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 text-center">
+    <h1>Bienvenido al comparador de algoritmos de ordenación</h1>
+    <p>Selecciona un método en el menú superior para visualizarlo.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
