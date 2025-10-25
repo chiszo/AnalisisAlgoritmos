@@ -5,21 +5,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.Arrays;
 
 @Controller
-public class SelectionController {
-    @GetMapping("/seleccion")
+public class InsercionController {
+    @GetMapping("/insercion")
     public String mostrarFormulario() {
-        return "seleccion";
+        return "insercion";
     }
 
-    @PostMapping("/seleccion")
-    public String ordenarSeleccion(@RequestParam("numeros") String numeros, Model model) {
+    @PostMapping("/insercion")
+    public String ordenarInsercion(@RequestParam("numeros") String numeros, Model model) {
 
         if (numeros == null || numeros.trim().isEmpty()) {
             model.addAttribute("error", "Por favor, ingrese al menos un número.");
-            return "seleccion";
+            return "insercion";
         }
 
         String[] partes = numeros.split(",");
@@ -27,9 +28,9 @@ public class SelectionController {
         boolean tieneVacio = Arrays.stream(partes)
                 .anyMatch(s -> s.trim().isEmpty());
         if (tieneVacio) {
-            model.addAttribute("error", "Hay campos vacíos entre comas. Ejemplo: 5, 2, 8, 1");
+            model.addAttribute("error", "Hay campos vacíos entre comas. Ejemplo: 123, 3, 1, 12");
             model.addAttribute("numerosIngresados", numeros);
-            return "seleccion";
+            return "insercion";
         }
 
         int[] arr;
@@ -42,27 +43,26 @@ public class SelectionController {
                     .toArray();
 
             if (arr.length == 0) {
-                model.addAttribute("error", "No se detectaron números válidos. Ejemplo: 5, 2, 8, 1");
+                model.addAttribute("error", "No se detectaron números válidos. Ejemplo: 123, 3, 1, 12");
                 model.addAttribute("numerosIngresados", numeros);
-                return "seleccion";
+                return "insercion";
             }
 
         } catch (NumberFormatException e) {
-            model.addAttribute("error", "Ingrese solo números separados por comas. Ejemplo: 5, 2, 8, 1");
+            model.addAttribute("error", "Ingrese solo números separados por comas. Ejemplo: 123, 3, 1, 12");
             model.addAttribute("numerosIngresados", numeros);
-            return "seleccion";
+            return "insercion";
         }
 
-        for (int i = 0; i < arr.length - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < arr.length; j++) {
-                if (arr[j] < arr[minIndex]) {
-                    minIndex = j;
-                }
+        for (int i = 1; i < arr.length; i++) {
+            int key = arr[i];
+            int j = i - 1;
+
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
             }
-            int temp = arr[i];
-            arr[i] = arr[minIndex];
-            arr[minIndex] = temp;
+            arr[j + 1] = key;
         }
 
         String resultado = Arrays.toString(arr);
@@ -70,6 +70,6 @@ public class SelectionController {
         model.addAttribute("numerosIngresados", numeros);
         model.addAttribute("resultado", resultado);
 
-        return "seleccion";
+        return "insercion";
     }
 }
