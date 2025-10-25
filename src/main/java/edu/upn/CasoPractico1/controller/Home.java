@@ -11,4 +11,9 @@ public class Home {
     public String Inicio(){
         return "inicio";
     }
+
+    @GetMapping(value = "")
+    public String Principal() {
+        return "redirect:/inicio";
+    }
 }
