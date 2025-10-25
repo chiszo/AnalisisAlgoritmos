@@ -27,7 +27,57 @@
 
 <div class="container mt-5 text-center">
     <h1>Bienvenido al comparador de algoritmos de ordenación</h1>
-    <p>Selecciona un método en el menú superior para visualizarlo.</p>
+    <p>Selecciona un método en el menú superior.</p>
+</div>
+
+<div class="container mt-5 text-center">
+    <h4>Ejemplos de estructuras de bucles y condicionales:</h4>
+</div>
+
+<div class="container mt-5">
+    <h4>Caso 1</h4>
+    <pre>
+for(int i=0; i&lt;n; i++) {          O(n)
+    for(int j=0; j&lt;n; j++) {      O(n)
+        if(i == j)                O(1)
+            matriz[i][j] = 1;     O(1)
+        else
+            matriz[i][j] = 0;     O(1)
+    }
+}
+
+        Complejidad total: n×(n×O(1))=n×n = O(n²)
+    </pre>
+</div>
+
+<div class="container mt-5">
+    <h4>Caso 2</h4>
+    <pre>
+suma = 0;                        O(1)
+for(int i=0; i&lt;n; i++) {         O(n)
+    if(i % 2 == 0)               O(1)
+        suma += i;               O(1)
+}
+System.out.println(suma);        O(1)
+
+        Complejidad total: O(1)+n×(O(1)+O(1))+O(1)
+                            O(1)+O(n)+O(1) = O(n)
+    </pre>
+</div>
+
+<div class="container mt-5">
+    <h4>Caso 3</h4>
+    <pre>
+int i = n;                       O(1)
+int contador = 0;                O(1)
+while(i &gt; 1) {                   O(log n)
+    i = i / 2;                   O(1)
+    contador++;                  O(1)
+}
+System.out.println(contador);    O(1)
+
+        Complejidad total: O(1)+O(1)+O(logn×1)+O(1) = O(log n)
+    </pre>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
