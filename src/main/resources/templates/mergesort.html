@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MergeSort - Ordenar palabras por longitud</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/inicio}">Algoritmos</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/burbuja}">Burbuja</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/insercion}">Inserción</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/seleccion}">Selección</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/quicksort}">QuickSort</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/mergesort}">MergeSort</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">MergeSort - Palabras por longitud</h2>
+
+    <div class="card p-4 shadow-sm">
+        <form th:action="@{/mergesort}" method="post">
+            <div class="mb-3">
+                <label for="frase" class="form-label">Escribe una frase:</label>
+                <input type="text" id="frase" name="frase" class="form-control"
+                       placeholder="Ejemplo: Los algoritmos ordenan datos eficientemente"
+                       th:value="${fraseIngresada}">
+                <div th:if="${error}" class="text-danger mt-2" th:text="${error}"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Procesar con MergeSort</button>
+        </form>
+
+        <div th:if="${resultado}" class="mt-4">
+            <h5>Palabras ordenadas por longitud:</h5>
+            <p class="fw-bold" th:text="${resultado}"></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
