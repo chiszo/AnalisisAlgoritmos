@@ -79,6 +79,46 @@ System.out.println(contador);    O(1)
         Complejidad total: O(1)+O(1)+O(logn×1)+O(1) = O(log n)
     </pre>
 </div>
+<div class="container mt-5">
+    <h4>Caso 4</h4>
+    <pre>
+int maxPrecio(int[] precios) {
+    int max = precios[0];
+    for (int p : precios) {
+        if (p > max)
+            max = p;
+    }
+    return max;
+}
+    </pre>
+</div>
+<div class="container mt-5">
+    <h4>Caso 5</h4>
+    <pre>
+    int busquedaBinaria(int[] arr, int id) {
+    int izq = 0, der = arr.length - 1;
+    while (izq &lt;= der) {
+    int mid = (izq + der) / 2;
+    if (arr[mid] == id) return mid;
+    if (arr[mid] &lt; id) izq = mid + 1;
+    else der = mid - 1;
+}
+    return -1;
+    }
+    </pre>
+</div>
+<div class="container mt-5">
+    <h4>Caso 6</h4>
+    <pre>
+    boolean hayDuplicados(String[] correos) {
+    for (int i = 0; i < correos.length; i++) {
+        for (int j = i + 1; j < correos.length; j++) {
+            if (correos[i].equals(correos[j])) return true;
+        }
+    }
+    return false;}
+    </pre>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
