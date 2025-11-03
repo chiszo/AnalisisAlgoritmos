@@ -15,18 +15,26 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link active" th:href="@{/burbuja}">Burbuja</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/insercion}">Inserción</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/seleccion}">Selección</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/quicksort}">QuickSort</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/mergesort}">MergeSort</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
+                        <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
+                        <li><a class="dropdown-item" th:href="@{/seleccion}">Selección</a></li>
+                        <li><a class="dropdown-item" th:href="@{/quicksort}">QuickSort</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link " th:href="@{/inicio2}">PC 2</a></li>
+
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Suma de Números Pares Por Burbuja)</h2>
+    <h2 class="text-center mb-4">Suma de Números Pares Por Burbuja</h2>
 
     <div class="card p-4 shadow-sm">
         <form th:action="@{/burbuja/sumarPares}" method="post">

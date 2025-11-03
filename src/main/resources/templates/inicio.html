@@ -15,11 +15,19 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/burbuja}">Burbuja</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/insercion}">Inserción</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/seleccion}">Selección</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/quicksort}">QuickSort</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/mergesort}">MergeSort</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
+                        <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
+                        <li><a class="dropdown-item" th:href="@{/seleccion}">Selección</a></li>
+                        <li><a class="dropdown-item" th:href="@{/quicksort}">QuickSort</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link " th:href="@{/inicio2}">PC 2</a></li>
+
             </ul>
         </div>
     </div>
@@ -127,7 +135,7 @@ Complejidad total: O(n)
     </pre>
 </div>
 <div class="container mt-5">
-    <h4>Caso 4</h4>
+    <h4>Caso 7</h4>
     <pre>
 int maxPrecio(int[] precios) {
     int max = precios[0];
@@ -137,10 +145,11 @@ int maxPrecio(int[] precios) {
     }
     return max;
 }
+        Complejidad total: O(n)
     </pre>
 </div>
 <div class="container mt-5">
-    <h4>Caso 5</h4>
+    <h4>Caso 8</h4>
     <pre>
     int busquedaBinaria(int[] arr, int id) {
     int izq = 0, der = arr.length - 1;
@@ -152,10 +161,11 @@ int maxPrecio(int[] precios) {
 }
     return -1;
     }
+        Complejidad total: O(logn)
     </pre>
 </div>
 <div class="container mt-5">
-    <h4>Caso 6</h4>
+    <h4>Caso 9</h4>
     <pre>
     boolean hayDuplicados(String[] correos) {
     for (int i = 0; i < correos.length; i++) {
@@ -164,6 +174,24 @@ int maxPrecio(int[] precios) {
         }
     }
     return false;}
+
+        Complejidad total: O(n2)
+    </pre>
+</div>
+
+<div class="container mt-5">
+    <h4>Caso 10</h4>
+    <pre>
+    int sumaPares(int[] arr) {
+    int suma = 0;
+    for (int n : arr) {
+        if (n % 2 == 0)
+            suma += n;
+    }
+    return suma;
+}
+
+Complejidad total: O(n)
     </pre>
 </div>
 
