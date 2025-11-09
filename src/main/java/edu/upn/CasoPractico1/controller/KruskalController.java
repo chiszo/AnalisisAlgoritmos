@@ -3,84 +3,144 @@ package edu.upn.CasoPractico1.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.*;
 
 @Controller
 public class KruskalController {
 
-    // ✅ Clases internas accesibles por Thymeleaf
-    public static class Edge implements Comparable<Edge> {
-        public int src, dest, weight;
-        public Edge(int s, int d, int w) { src = s; dest = d; weight = w; }
+    static class Edge implements Comparable<Edge> {
+        int origen, destino, peso;
+
+        public Edge(int origen, int destino, int peso) {
+            this.origen = origen;
+            this.destino = destino;
+            this.peso = peso;
+        }
+
         @Override
-        public int compareTo(Edge compareEdge) {
-            return this.weight - compareEdge.weight;
+        public int compareTo(Edge o) {
+            return Integer.compare(this.peso, o.peso);
+        }
+
+        @Override
+        public String toString() {
+            return "(" + origen + " - " + destino + ", peso: " + peso + ")";
         }
     }
 
-    public static class Subset {
-        int parent, rank;
-    }
+    static class UnionFind {
+        int[] padre, rango;
 
-    int find(Subset[] subsets, int i) {
-        if (subsets[i].parent != i)
-            subsets[i].parent = find(subsets, subsets[i].parent);
-        return subsets[i].parent;
-    }
+        public UnionFind(int n) {
+            padre = new int[n];
+            rango = new int[n];
+            for (int i = 0; i < n; i++) padre[i] = i;
+        }
 
-    void union(Subset[] subsets, int x, int y) {
-        int xroot = find(subsets, x);
-        int yroot = find(subsets, y);
+        int find(int x) {
+            if (padre[x] != x)
+                padre[x] = find(padre[x]);
+            return padre[x];
+        }
 
-        if (subsets[xroot].rank < subsets[yroot].rank)
-            subsets[xroot].parent = yroot;
-        else if (subsets[xroot].rank > subsets[yroot].rank)
-            subsets[yroot].parent = xroot;
-        else {
-            subsets[yroot].parent = xroot;
-            subsets[xroot].rank++;
+        void union(int x, int y) {
+            int raizX = find(x);
+            int raizY = find(y);
+
+            if (raizX != raizY) {
+                if (rango[raizX] < rango[raizY]) {
+                    padre[raizX] = raizY;
+                } else if (rango[raizX] > rango[raizY]) {
+                    padre[raizY] = raizX;
+                } else {
+                    padre[raizY] = raizX;
+                    rango[raizX]++;
+                }
+            }
         }
     }
 
     @GetMapping("/kruskal")
-    public String ejecutarKruskal(Model model) {
-        int vertices = 5;
-        List<Edge> edges = new ArrayList<>();
+    public String mostrarFormulario() {
+        return "kruskal";
+    }
 
-        // 🔹 Grafo de ejemplo
-        edges.add(new Edge(0, 1, 10));
-        edges.add(new Edge(0, 2, 6));
-        edges.add(new Edge(0, 3, 5));
-        edges.add(new Edge(1, 3, 15));
-        edges.add(new Edge(2, 3, 4));
+    @PostMapping("/kruskal")
+    public String ejecutarKruskal(
+            @RequestParam("vertices") String verticesStr,
+            @RequestParam("aristas") String aristasStr,
+            Model model) {
 
-        // 🔹 Ordenar por peso
-        Collections.sort(edges);
-
-        Subset[] subsets = new Subset[vertices];
-        for (int v = 0; v < vertices; ++v) {
-            subsets[v] = new Subset();
-            subsets[v].parent = v;
-            subsets[v].rank = 0;
+        if (verticesStr == null || verticesStr.trim().isEmpty()) {
+            model.addAttribute("error", "Ingrese la cantidad de vértices.");
+            return "kruskal";
         }
 
-        List<Edge> result = new ArrayList<>();
-        int e = 0, i = 0;
+        if (aristasStr == null || aristasStr.trim().isEmpty()) {
+            model.addAttribute("error", "Ingrese las aristas.");
+            model.addAttribute("verticesIngresados", verticesStr);
+            return "kruskal";
+        }
 
-        while (e < vertices - 1 && i < edges.size()) {
-            Edge next = edges.get(i++);
-            int x = find(subsets, next.src);
-            int y = find(subsets, next.dest);
+        int n;
+        try {
+            n = Integer.parseInt(verticesStr.trim());
+            if (n <= 0) {
+                model.addAttribute("error", "El número de vértices debe ser mayor que 0.");
+                return "kruskal";
+            }
+        } catch (NumberFormatException e) {
+            model.addAttribute("error", "Ingrese un número válido de vértices.");
+            return "kruskal";
+        }
 
-            if (x != y) {
-                result.add(next);
-                union(subsets, x, y);
-                e++;
+        List<Edge> edges = new ArrayList<>();
+        try {
+            String[] partes = aristasStr.split(",");
+            for (String p : partes) {
+                String[] datos = p.trim().split("-");
+                if (datos.length != 3) {
+                    model.addAttribute("error", "Formato incorrecto. Use: origen-destino-peso (ej: 0-1-4, 1-2-3)");
+                    model.addAttribute("verticesIngresados", verticesStr);
+                    model.addAttribute("aristasIngresadas", aristasStr);
+                    return "kruskal";
+                }
+                int origen = Integer.parseInt(datos[0].trim());
+                int destino = Integer.parseInt(datos[1].trim());
+                int peso = Integer.parseInt(datos[2].trim());
+                edges.add(new Edge(origen, destino, peso));
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Error al procesar las aristas. Revise el formato.");
+            model.addAttribute("verticesIngresados", verticesStr);
+            model.addAttribute("aristasIngresadas", aristasStr);
+            return "kruskal";
+        }
+
+        Collections.sort(edges);
+        UnionFind uf = new UnionFind(n);
+
+        List<Edge> mst = new ArrayList<>();
+        int costoTotal = 0;
+
+        for (Edge edge : edges) {
+            int raiz1 = uf.find(edge.origen);
+            int raiz2 = uf.find(edge.destino);
+            if (raiz1 != raiz2) {
+                uf.union(raiz1, raiz2);
+                mst.add(edge);
+                costoTotal += edge.peso;
             }
         }
 
-        model.addAttribute("aristas", result);
+        model.addAttribute("verticesIngresados", verticesStr);
+        model.addAttribute("aristasIngresadas", aristasStr);
+        model.addAttribute("resultado", mst);
+        model.addAttribute("costoTotal", costoTotal);
+
         return "kruskal";
     }
 }
