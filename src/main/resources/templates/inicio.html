@@ -17,7 +17,7 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
                         <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
                         <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
@@ -26,7 +26,13 @@
                         <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link " th:href="@{/inicio2}">PC 2</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 2</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/cambioMoneda}">Cambio de Moneda</a></li>
+                        <li><a class="dropdown-item" th:href="@{/agenteViajero}">Agente Viajero</a></li>
+                    </ul>
+                </li>
 
             </ul>
         </div>
