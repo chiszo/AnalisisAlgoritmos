@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Algoritmos Recursivos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        input {
+            border: 1px solid #ccc;
+            padding: 6px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/inicio}">Algoritmos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
+                        <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
+                        <li><a class="dropdown-item" th:href="@{/seleccion}">Selección</a></li>
+                        <li><a class="dropdown-item" th:href="@{/quicksort}">QuickSort</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 2</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/cambioMoneda}">Cambio de Moneda</a></li>
+                        <li><a class="dropdown-item" th:href="@{/agenteViajero}">Agente Viajero</a></li>
+                        <li><a class="dropdown-item" th:href="@{/permutaciones}">Permutaciones</a></li>
+                        <li><a class="dropdown-item" th:href="@{/dijkstra}">Dijkstra</a></li>
+                        <li><a class="dropdown-item" th:href="@{/kruskal}">Kruskal</a></li>
+                        <li><a class="dropdown-item active" th:href="@{/recursivos}">Recursivos</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Algoritmos Recursivos</h1>
+    <form th:action="@{/recursivos}" method="post">
+        <label for="numeros">Ingrese los números (separados por comas):</label>
+        <input type="text" id="numeros" name="numeros" placeholder="Ejemplo: 5,3,8,1,2" required>
+
+        <label for="buscar">Número a buscar:</label>
+        <input type="number" id="buscar" name="buscar" placeholder="Ejemplo: 3" required>
+
+        <button type="submit">Procesar</button>
+    </form>
+
+    <div class="resultado" th:if="${resultado}">
+        <h2>Resultado</h2>
+        <p th:text="${resultado}"></p>
+    </div>
+</div>
+</body>
+</html>
