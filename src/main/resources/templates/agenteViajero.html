@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agente Viajero (Thymeleaf)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        /* Estilos solo para la tabla y sus contenidos */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f9f9f9;
+        }
+        input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+        .diagonal {
+            background-color: #eee;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/inicio}">Algoritmos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
+                        <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
+                        <li><a class="dropdown-item" th:href="@{/seleccion}">Selección</a></li>
+                        <li><a class="dropdown-item" th:href="@{/quicksort}">QuickSort</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 2</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/cambioMoneda}">Cambio de Moneda</a></li>
+                        <li><a class="dropdown-item" th:href="@{/agenteViajero}">Agente Viajero</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h2>Agente Viajero (Vecino más Cercano)</h2>
+
+    <form th:action="@{/resolver}" method="POST" th:object="${tspForm}">
+        <p>Edite las distancias de la matriz (N x N):</p>
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th th:each="i : ${#numbers.sequence(0, tspForm.matrix.length - 1)}" th:text="${i}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row, rowStat : *{matrix}">
+                <th th:text="${rowStat.index}"></th>
+
+                <td th:each="cell, cellStat : ${row}">
+
+                    <span th:if="${rowStat.index == cellStat.index}" class="diagonal">0</span>
+
+                    <input th:unless="${rowStat.index == cellStat.index}" type="number"
+                           th:field="*{matrix[__${rowStat.index}__][__${cellStat.index}__]}" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary w-100 fs-5">Calcular Ruta Óptima (Voraz)</button>
+    </form>
+
+    <div class="alert alert-info mt-4" th:if="${resultado != null}">
+        <h4 class="alert-heading">¡Ruta Calculada!</h4>
+        <p>
+            <strong>Ruta (Vecino más cercano):</strong>
+            <span class="fw-bold" th:text="${resultado.ruta}">[0, 1, 3, 2, 0]</span>
+        </p>
+        <p>
+            <strong>Costo Total:</strong>
+            <span class="fw-bold" th:text="${resultado.costoTotal}">80</span>
+        </p>
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
