@@ -2,11 +2,15 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Calculadora de Cambio (Thymeleaf)</title>
-
+    <title>Algoritmos Recursivos</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-
+    <style>
+        input {
+            border: 1px solid #ccc;
+            padding: 6px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
@@ -29,15 +33,16 @@
                         <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 2</a>
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 2</a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{/cambioMoneda}">Cambio de Moneda</a></li>
                         <li><a class="dropdown-item" th:href="@{/agenteViajero}">Agente Viajero</a></li>
                         <li><a class="dropdown-item" th:href="@{/permutaciones}">Permutaciones</a></li>
                         <li><a class="dropdown-item" th:href="@{/dijkstra}">Dijkstra</a></li>
                         <li><a class="dropdown-item" th:href="@{/kruskal}">Kruskal</a></li>
-                        <li><a class="dropdown-item" th:href="@{/recursivos}">Recursivos</a></li>
+                        <li><a class="dropdown-item active" th:href="@{/recursivos}">Recursivos</a></li>
                     </ul>
                 </li>
             </ul>
@@ -46,43 +51,29 @@
 </nav>
 
 <div class="container mt-5">
-    <div class="card p-4 shadow-sm">
+    <h2 class="text-center mb-4">Algoritmos Recursivos</h2>
 
-        <h1 class="text-center mb-4">Calculadora de Cambio</h1>
-
-        <form th:action="@{/cambioMoneda}" method="GET">
-            <div class="mb-3">
-                <input type="number" name="monto" class="form-control form-control-lg"
-                       placeholder="Ingrese el monto (ej. 93)"
-                       th:value="${montoSolicitado != null ? montoSolicitado : ''}" />
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Calcular Cambio</button>
-        </form>
-
-        <div class="mt-4" th:if="${resultado != null}">
-
-            <table class="table table-striped table-bordered" th:unless="${resultado.isEmpty()}">
-                <thead>
-                <tr>
-                    <th>Cantidad</th>
-                    <th>Moneda de</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="entry : ${resultado}">
-                    <td th:text="${entry.value}">3</td>
-                    <td th:text="${'S/ ' + entry.key}">S/ 1</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div class="alert alert-warning" th:if="${resultado.isEmpty() and montoSolicitado != null}">
-                No se necesita cambio para el monto
-                <strong th:text="${montoSolicitado}"></strong>.
-            </div>
+    <form id="formRecursivos" th:action="@{/recursivos}" method="post">
+        <div class="mb-3">
+            <label for="numeros" class="form-label fw-bold">Ingrese los números (separados por comas):</label>
+            <input type="text" id="numeros" name="numeros" class="form-control" placeholder="Ejemplo: 5,3,8,1,2" required>
         </div>
 
-    </div> </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <div class="mb-3">
+            <label for="buscar" class="form-label fw-bold">Número a buscar:</label>
+            <input type="number" id="buscar" name="buscar" class="form-control" placeholder="Ejemplo: 3" required>
+        </div>
 
+        <button type="submit" class="btn btn-primary w-100 fs-5">Procesar</button>
+    </form>
+
+    <div class="alert alert-info mt-4" th:if="${resultado}">
+        <h4 class="alert-heading">Resultado</h4>
+        <p th:text="${resultado}"></p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>

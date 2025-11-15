@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Calculadora de Cambio (Thymeleaf)</title>
-
+    <title>Dijkstra - Ruta más corta</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-
 </head>
-<body class="bg-light">
+<body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
@@ -20,7 +17,7 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
-                    <ul class="dropdown-menu dropdown-menu-end">
+                    <ul class="dropdown-menu">
                         <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
                         <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
                         <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
@@ -34,7 +31,6 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" th:href="@{/cambioMoneda}">Cambio de Moneda</a></li>
                         <li><a class="dropdown-item" th:href="@{/agenteViajero}">Agente Viajero</a></li>
-                        <li><a class="dropdown-item" th:href="@{/permutaciones}">Permutaciones</a></li>
                         <li><a class="dropdown-item" th:href="@{/dijkstra}">Dijkstra</a></li>
                         <li><a class="dropdown-item" th:href="@{/kruskal}">Kruskal</a></li>
                         <li><a class="dropdown-item" th:href="@{/recursivos}">Recursivos</a></li>
@@ -46,43 +42,41 @@
 </nav>
 
 <div class="container mt-5">
+    <h2 class="text-center mb-4">Algoritmo de Dijkstra</h2>
+
     <div class="card p-4 shadow-sm">
-
-        <h1 class="text-center mb-4">Calculadora de Cambio</h1>
-
-        <form th:action="@{/cambioMoneda}" method="GET">
+        <form th:action="@{/dijkstra}" method="post">
             <div class="mb-3">
-                <input type="number" name="monto" class="form-control form-control-lg"
-                       placeholder="Ingrese el monto (ej. 93)"
-                       th:value="${montoSolicitado != null ? montoSolicitado : ''}" />
+                <label for="origen" class="form-label">Nodo de origen (0 - 4):</label>
+                <input type="number" id="origen" name="origen" class="form-control"
+                       placeholder="Ejemplo: 0"
+                       min="0" max="4" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Calcular Cambio</button>
+            <button type="submit" class="btn btn-primary">Calcular ruta más corta</button>
         </form>
 
-        <div class="mt-4" th:if="${resultado != null}">
-
-            <table class="table table-striped table-bordered" th:unless="${resultado.isEmpty()}">
+        <div th:if="${distancias}" class="mt-4">
+            <h5>
+                Distancias mínimas desde el nodo [[${origen}]]:
+            </h5>
+            <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Cantidad</th>
-                    <th>Moneda de</th>
+                    <th>Nodo destino</th>
+                    <th>Distancia mínima</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="entry : ${resultado}">
-                    <td th:text="${entry.value}">3</td>
-                    <td th:text="${'S/ ' + entry.key}">S/ 1</td>
+                <tr th:each="d, i : ${distancias}">
+                    <td th:text="${i.index}"></td>
+                    <td th:text="${d}"></td>
                 </tr>
                 </tbody>
             </table>
-
-            <div class="alert alert-warning" th:if="${resultado.isEmpty() and montoSolicitado != null}">
-                No se necesita cambio para el monto
-                <strong th:text="${montoSolicitado}"></strong>.
-            </div>
         </div>
+    </div>
+</div>
 
-    </div> </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
