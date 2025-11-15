@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Problema de Asignación</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/inicio}">Algoritmos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
+                        <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
+                        <li><a class="dropdown-item" th:href="@{/seleccion}">Selección</a></li>
+                        <li><a class="dropdown-item" th:href="@{/quicksort}">QuickSort</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 2</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/cambioMoneda}">Cambio de Moneda</a></li>
+                        <li><a class="dropdown-item" th:href="@{/agenteViajero}">Agente Viajero</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">T1</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/asignacion}">Problema de Asignación</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h1>Problema de Asignación (Programación Dinámica vs Fuerza Bruta)</h1>
+    <p>Asignar N empleados a N tareas con el costo mínimo.</p>
+
+    <hr>
+
+    <form th:action="@{/asignacion/generar}" method="post" class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="n" class="form-label"><b>Tamaño (N):</b></label>
+        </div>
+        <div class="col-auto">
+            <input type="number" id="n" name="n" th:value="${asignacionForm.n}" min="2" max="15" class="form-control" style="width: 100px;">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Generar Matriz</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <form th:if="${asignacionForm.n > 0}" th:action="@{/asignacion/optimizar}" th:object="${asignacionForm}" method="post">
+
+        <input type="hidden" th:field="*{n}" />
+
+        <div class="mb-3">
+            <h4>Seleccionar Enfoque:</h4>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="radioDP" value="dp" th:field="*{algoritmo}">
+                <label class="form-check-label" for="radioDP">
+                    <b>Programación Dinámica (Recomendado)</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="radioFB" value="fb" th:field="*{algoritmo}">
+                <label class="form-check-label" for="radioFB">
+                    <b>Fuerza Bruta (Lento, N &lt;= 10)</b>
+                </label>
+            </div>
+        </div>
+        <h4>Matriz de Costos (N x N)</h4>
+        <table class="table table-bordered" style="width: auto;">
+            <thead>
+            <tr>
+                <th style="width: 120px;">Empleado \ Tarea</th>
+                <th th:each="i : ${#numbers.sequence(0, asignacionForm.n - 1)}"
+                    th:text="'Tarea ' + (${i} + 1)"
+                    style="width: 100px; text-align: center;">
+                </th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="fila, rowStat : *{filas}">
+                <td><b th:text="'Empleado ' + (${rowStat.index} + 1)"></b></td>
+
+                <td th:each="costo, colStat : ${fila.costos}">
+                    <input type="number"
+                           th:field="*{filas[__${rowStat.index}__].costos[__${colStat.index}__]}"
+                           class="form-control"
+                           style="text-align: center;"
+                           min="0"
+                           required>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-success btn-lg mt-3">Optimizar Asignación</button>
+    </form>
+
+    <div th:if="${error != null}" class="alert alert-danger mt-4">
+        <h4>Error</h4>
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${costoMinimo != null}" class="alert alert-success mt-4">
+        <h2>Costo Total Mínimo: <span th:text="${costoMinimo}"></span></h2>
+        <hr>
+        <p class="mb-0">
+            <b>Algoritmo Utilizado:</b> <span th:text="${algoritmoUsado}"></span>
+        </p>
+        <p class="mb-0">
+            <b>Tiempo de Ejecución:</b> <span th:text="${tiempoMs}"></span> ms
+        </p>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
