@@ -50,23 +50,31 @@
     </div>
 </nav>
 
-<div class="container">
-    <h1>Algoritmos Recursivos</h1>
-    <form th:action="@{/recursivos}" method="post">
-        <label for="numeros">Ingrese los números (separados por comas):</label>
-        <input type="text" id="numeros" name="numeros" placeholder="Ejemplo: 5,3,8,1,2" required>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Algoritmos Recursivos</h2>
 
-        <label for="buscar">Número a buscar:</label>
-        <input type="number" id="buscar" name="buscar" placeholder="Ejemplo: 3" required>
+    <form id="formRecursivos" th:action="@{/recursivos}" method="post">
+        <div class="mb-3">
+            <label for="numeros" class="form-label fw-bold">Ingrese los números (separados por comas):</label>
+            <input type="text" id="numeros" name="numeros" class="form-control" placeholder="Ejemplo: 5,3,8,1,2" required>
+        </div>
 
-        <button type="submit">Procesar</button>
+        <div class="mb-3">
+            <label for="buscar" class="form-label fw-bold">Número a buscar:</label>
+            <input type="number" id="buscar" name="buscar" class="form-control" placeholder="Ejemplo: 3" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 fs-5">Procesar</button>
     </form>
 
-    <div class="resultado" th:if="${resultado}">
-        <h2>Resultado</h2>
+    <div class="alert alert-info mt-4" th:if="${resultado}">
+        <h4 class="alert-heading">Resultado</h4>
         <p th:text="${resultado}"></p>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
 </body>
 </html>
 

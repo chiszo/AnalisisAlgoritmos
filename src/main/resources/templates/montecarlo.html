@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulación Montecarlo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <style>
+        .canvas-container {
+            border: 2px solid #333;
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/inicio}">Algoritmos</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 1</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/inicio}">Casos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/burbuja}">Burbuja</a></li>
+                        <li><a class="dropdown-item" th:href="@{/insercion}">Inserción</a></li>
+                        <li><a class="dropdown-item" th:href="@{/seleccion}">Selección</a></li>
+                        <li><a class="dropdown-item" th:href="@{/quicksort}">QuickSort</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mergesort}">MergeSort</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">PC 2</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/cambioMoneda}">Cambio de Moneda</a></li>
+                        <li><a class="dropdown-item" th:href="@{/agenteViajero}">Agente Viajero</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">T1</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/asignacion}">Problema de Asignación</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Ejercicios</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/}">Ejercicio 1</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/montecarlo}">Ejercicio 2: Área (Montecarlo)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Estimación de Área (Montecarlo)</h1>
+    <p>Algoritmo probabilista para calcular el área de una figura irregular (Círculo) inscrita en un cuadrado de 1x1.</p>
+
+    <div class="alert alert-info">
+        <h5>Razonamiento Teórico:</h5>
+        <p class="mb-0">
+            Según la <b>Ley de los Grandes Números</b>, si lanzamos puntos aleatorios uniformemente distribuidos sobre un área conocida (el cuadrado),
+            la proporción de puntos que caen dentro de la figura irregular se aproxima a la proporción de sus áreas.
+            <br>
+            <i>Área Estimada = Área Cuadrado * (Puntos Dentro / Total Puntos)</i>
+        </p>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">Simulación en Servidor (Java)</div>
+                <div class="card-body">
+                    <form th:action="@{/montecarlo/simular}" th:object="${monteCarloForm}" method="post">
+                        <div class="mb-3">
+                            <label for="n" class="form-label">Número de Puntos (N):</label>
+                            <input type="number" id="n" th:field="*{n}" class="form-control" min="100" max="10000000">
+                            <div class="form-text">Entre mayor sea N, mayor será la precisión.</div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Ejecutar Simulación</button>
+                    </form>
+
+                    <div th:if="${resultado != null}" class="mt-4">
+                        <h5>Resultados:</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Total Puntos
+                                <span class="badge bg-primary rounded-pill" th:text="${resultado.totalPuntos}"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Puntos Dentro
+                                <span class="badge bg-success rounded-pill" th:text="${resultado.puntosDentro}"></span>
+                            </li>
+                            <li class="list-group-item list-group-item-warning">
+                                <b>Área Estimada:</b> <span th:text="${#numbers.formatDecimal(resultado.areaEstimada, 1, 5)}"></span> u²
+                            </li>
+                            <li class="list-group-item">
+                                <i>Error Absoluto: <span th:text="${#numbers.formatDecimal(resultado.error, 1, 6)}"></span></i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 text-center">
+            <div class="card">
+                <div class="card-header bg-dark text-white">Visualización</div>
+                <div class="card-body">
+                    <p><small>Visualización gráfica (Lanzando 1000 ptos de muestra)</small></p>
+                    <canvas id="monteCarloCanvas" width="300" height="300" class="canvas-container"></canvas>
+                    <br>
+                    <button onclick="dibujarMonteCarlo()" class="btn btn-outline-secondary btn-sm mt-2">Re-dibujar Visualización</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function dibujarMonteCarlo() {
+        const canvas = document.getElementById('monteCarloCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const puntos = 1500; // Solo dibujamos 1500 para no saturar el navegador
+
+        // Limpiar
+        ctx.clearRect(0, 0, width, height);
+
+        // Dibujar Cuadrado (Fondo blanco ya está)
+
+        // Dibujar Círculo (Figura Irregular) visualmente
+        ctx.beginPath();
+        ctx.arc(width/2, height/2, width/2, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#ccc';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        let dentroCount = 0;
+
+        for(let i=0; i<puntos; i++) {
+            // Coordenadas aleatorias
+            let x = Math.random(); // 0 a 1
+            let y = Math.random(); // 0 a 1
+
+            // Escalar al canvas
+            let px = x * width;
+            let py = y * height;
+
+            // Chequear si está dentro del círculo (centro 0.5, 0.5, radio 0.5)
+            let dist = Math.sqrt(Math.pow(x - 0.5, 2) + Math.pow(y - 0.5, 2));
+
+            ctx.beginPath();
+            ctx.arc(px, py, 2, 0, 2 * Math.PI);
+
+            if (dist <= 0.5) {
+                ctx.fillStyle = 'rgba(40, 167, 69, 0.6)'; // Verde (Dentro)
+                dentroCount++;
+            } else {
+                ctx.fillStyle = 'rgba(220, 53, 69, 0.6)'; // Rojo (Fuera)
+            }
+            ctx.fill();
+        }
+    }
+
+    // Dibujar al cargar la página
+    window.onload = dibujarMonteCarlo;
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
